@@ -1,4 +1,5 @@
 import tkinter
+import winsound
 import threading
 import sqlite3 as sql
 import random
@@ -184,16 +185,6 @@ def end():
     main.root.destroy()
     exit_val=1
     
-def timer(n):
-    tm=n
-    t=StringVar()
-    while n!=0:
-        n=n-1
-        time.sleep(1)#time.sleep(seconds) #here you can mention seconds according to your requirement.
-        print ("00 : ",tm-n)
-        label=Label(display.labelframe,textvariable=t,padx=45,height=1,width=21,relief="raised",borderwidth=1,bg="chocolate1",fg="black",font=("arial bold ",25))
-        label.place(x=0,y=550)
-        t.set(tm-n)
 
 
 txt=''        
@@ -322,9 +313,10 @@ def select(l,but,bg_color):
                     #//////////////////////////////////////////////////// Check_Database
                     global words,count
                     if x in words and x not in score_word:
+                        winsound.PlaySound("word.wav",winsound.SND_ASYNC)
                         m=x
                         count+=1
-                        print(x)
+                        #print(x)
                         score_word.append(x)
                         score_made+=len(x)
                         global r,grn,b,fnl_color
@@ -334,6 +326,7 @@ def select(l,but,bg_color):
                         grn=str((int(grn)-100))
                     
                     else:
+                        winsound.PlaySound("wrong_beep.wav",winsound.SND_ASYNC)
                         buton[row][col].configure(bg=prev_end_color,fg="black")
                         buton[beg_row][beg_col].configure(bg=prev_beg_color,fg="black")
     display()                        
@@ -341,25 +334,27 @@ def select(l,but,bg_color):
                     #/////////////////////////////////////////////////// close Database
                          
                         
-    ###########################################################################    end        
+    ###########################################################################    end    
+tmpvar=0    
 class button:
     def __init__(self,row,col):
-        self.a=StringVar()
+        self.a=StringVar() 
         self.b=Button(main.frame,textvariable=self.a,command=self.fun,bg='gray79',fg='black',font=("arial bold ",15),width=2,height=1)
         self.a.set(random.choice(' '))
         #abcdefghijklmnopqrstuvwxyz
-        self.b.grid(row=row,column=col,ipadx=30,ipady=15,padx=1,pady=1)
-            
+        self.b.grid(row=row,column=col,ipadx=30,ipady=15,padx=1,pady=1)  
     def fun(self):
+        global tmpvar
         l=self.a.get()
         but=self.b
         bg_color=but['bg']
         #print('fun',a)
-        select(l,but,bg_color)
+        if tmpvar==0:
+            select(l,but,bg_color)
         
 now,tym,cnt=0,0,0
 def update_clock():
-    global now,tym,cnt,txt
+    global now,tym,cnt,txt,tmpvar
     #now = time.strftime("%H:%M:%S")
     now = time.strftime("%S")
     now=int(now)%30
@@ -371,16 +366,20 @@ def update_clock():
         score=score_made
     if cnt==1:
         txt='Time Over:\n'+str(score_made)+' Points'
+        winsound.PlaySound("Buzzer",winsound.SND_ASYNC)
+        tmpvar=1                                            #to stop further action of buttons
         display.labelx.configure(text=txt)
     elif score_made==actual_score:
+        winsound.PlaySound("Short_triumphal.wav",winsound.SND_ASYNC)
         txt='Congratulations\nTime:'+str(now)+' Sec'
+        tmpvar=1                                            #to stop further action of buttons
         display.labelx.configure(text=txt)
     else:
         now=30-now
         txt='Time Remaining:\n'+str(now)+' Sec'
         display.labelx.configure(text=txt)
         display.labelframe.after(10, update_clock)
-        
+
 def main():
     global tym
     main.root=Tk()
@@ -395,6 +394,7 @@ def main():
             main.butons.append(b)        
     arange_words()
     display()
+    winsound.PlaySound("game_menu",winsound.SND_ASYNC)
     tym=int(time.strftime("%S"))%30 
     t1=threading.Thread(target=update_clock)
     t1.start()
