@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 fruits
+=======
+animals
+>>>>>>> 455e43d02ac70f407bc2fce01a44828de1587248
