@@ -1,9 +1,8 @@
 ### Packages
 import winsound
 import tkinter
-from PIL import ImageTk, Image
 import PIL.Image
-import os
+#import os
 import threading
 import sqlite3 as sql
 import random
@@ -23,9 +22,14 @@ prev_beg_color,prev_end_color="gray79","gray79"
 words=[]
 
 ###file
-f=open('E:\\file\\file.txt','r')
+f=open('file.txt','r')
 strk=f.read()
 print(strk)
+f.close()
+
+f=open('file1.txt','r')
+strk1=f.read()
+#print(strk)
 f.close()
 
 def database(strk):
@@ -211,9 +215,13 @@ def arange_words():
 tmpvar=0    
 class button:
     def __init__(self,row,col):
+        global strk1
+        d=' '
+        if strk1=='hard':
+            d='abcdefghijklmnopqrstuvwxyz'
         self.a=StringVar() 
         self.b=Button(main.frame,textvariable=self.a,command=self.fun,bg='gray79',fg='black',font=("arial bold ",15),width=2,height=1)
-        self.a.set(random.choice(' '))
+        self.a.set(random.choice(d))
         #abcdefghijklmnopqrstuvwxyz
         self.b.grid(row=row,column=col,ipadx=30,ipady=15,padx=1,pady=1)  
     def fun(self):
