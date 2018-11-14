@@ -1,9 +1,9 @@
 ### Packages
 import winsound
 import tkinter
-from PIL import ImageTk, Image
 import PIL.Image
-import os
+from PIL import ImageTk, Image
+#import os
 import threading
 import sqlite3 as sql
 import random
@@ -23,9 +23,14 @@ prev_beg_color,prev_end_color="gray79","gray79"
 words=[]
 
 ###file
-f=open('E:\\file\\file.txt','r')
+f=open('file.txt','r')
 strk=f.read()
 print(strk)
+f.close()
+
+f=open('file1.txt','r')
+strk1=f.read()
+#print(strk)
 f.close()
 
 def database(strk):
@@ -59,11 +64,17 @@ now,tym,cnt=0,0,0
 def main():
     global tym
     main.root=Tk()
+    main.root.wm_attributes('-fullscreen', True)
     main.root.title("Word_Puzzle")
-    main.root.geometry('2000x2000')
+    #main.root.geometry('200x100')
+    
+    background_image=ImageTk.PhotoImage(PIL.Image.open("white.jpg"))
+    background_label =Label(main.root, image=background_image)
+    background_label.place(x=0, y=0, relwidth=1, relheight=1)
+    
     main.butons=[]
     main.frame=Frame(main.root,bg="magenta3",relief="raised",borderwidth=15)
-    main.frame.place(x=10,y=10)
+    main.frame.place(x=10,y=50)
     winsound.PlaySound("game_menu",winsound.SND_ASYNC)
     for i in range(1,11):
         for j in range(1,11):
@@ -211,9 +222,13 @@ def arange_words():
 tmpvar=0    
 class button:
     def __init__(self,row,col):
+        global strk1
+        d=' '
+        if strk1=='hard':
+            d='abcdefghijklmnopqrstuvwxyz'
         self.a=StringVar() 
         self.b=Button(main.frame,textvariable=self.a,command=self.fun,bg='gray79',fg='black',font=("arial bold ",15),width=2,height=1)
-        self.a.set(random.choice(' '))
+        self.a.set(random.choice(d))
         #abcdefghijklmnopqrstuvwxyz
         self.b.grid(row=row,column=col,ipadx=30,ipady=15,padx=1,pady=1)  
     def fun(self):
@@ -230,7 +245,7 @@ class button:
 def display(): 
     global fnl_color
     display.labelframe=Frame(main.root,bg="black",relief="raised",borderwidth=15,height=750,width=520)
-    display.labelframe.place(x=1000,y=10)
+    display.labelframe.place(x=1000,y=50)
     Title_label=Label(display.labelframe,text="SCORE BOARD",padx=71,relief="raised",borderwidth=1,bg="coral2",fg="black",font=("Times bold ",35))
     Title_label.place(x=0,y=0)
     
