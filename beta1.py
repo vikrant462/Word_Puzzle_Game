@@ -2,11 +2,7 @@
 import winsound
 import tkinter
 import PIL.Image
-<<<<<<< HEAD
 from PIL import ImageTk, Image
-=======
->>>>>>> 455e43d02ac70f407bc2fce01a44828de1587248
-#import os
 import threading
 import sqlite3 as sql
 import random
